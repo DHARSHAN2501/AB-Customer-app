@@ -36,8 +36,18 @@ export const FoodCard = ({ item, onSelect }) => {
           className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-500 ease-out"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
+        
+        {item.category_name && (
+          <span className="absolute top-2 left-2 bg-slate-900/80 backdrop-blur-md text-white text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded-full border border-white/20 shadow-xs">
+            {item.category_name}
+          </span>
+        )}
 
-
+        {item.is_catering && (
+          <span className="absolute top-2 right-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-[9px] sm:text-[10px] font-black px-2 py-0.5 rounded-full shadow-md animate-pulse">
+            Party Pack
+          </span>
+        )}
       </div>
 
       <div className="p-3 sm:p-5 flex-1 flex flex-col justify-between space-y-2 sm:space-y-4">

@@ -27,6 +27,11 @@ export const FoodDetailsModal = ({ item, isOpen, onClose }) => {
 
 
           <div className="absolute bottom-4 left-4 right-4 text-white">
+            {item.category_name && (
+              <span className="inline-block bg-white/20 backdrop-blur-md text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full mb-1 border border-white/20">
+                {item.category_name}
+              </span>
+            )}
             <div className="flex items-center justify-between">
               <h2 className="text-xl font-black">{item.name}</h2>
               <span className="text-2xl font-black bg-gradient-to-r from-cyan-300 to-amber-300 bg-clip-text text-transparent">₹{item.price}</span>

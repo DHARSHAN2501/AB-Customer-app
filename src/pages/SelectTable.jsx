@@ -22,15 +22,13 @@ export const SelectTable = () => {
     <div className="min-h-screen bg-slate-50/70 py-10 px-4 flex items-center justify-center">
       <div className="max-w-2xl w-full bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-xl space-y-6">
         
-        {/* Header Banner */}
-        <div className="relative rounded-2xl bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-800 p-6 text-white text-center shadow-lg overflow-hidden">
-          <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-xl pointer-events-none" />
-          <h1 className="text-2xl sm:text-3xl font-black tracking-tight flex items-center justify-center gap-2">
-            Welcome to Gourmet Restaurant <Sparkles className="w-5 h-5 text-cyan-300" />
-          </h1>
-          <p className="text-blue-100 text-xs sm:text-sm mt-1 font-medium max-w-md mx-auto">
-            Please select your seated Table Number to explore our digital menu and order instantly.
-          </p>
+        {/* Arunachala Bhavan Hero Banner */}
+        <div className="w-full rounded-2xl overflow-hidden shadow-lg border border-slate-200 bg-slate-900">
+          <img 
+            src="/customer-banner.jpg?v=3" 
+            alt="Arunachala Bhavan Pure Vegetarian" 
+            className="w-full h-auto max-h-[320px] object-cover block"
+          />
         </div>
 
         {/* Selected Table Callout */}

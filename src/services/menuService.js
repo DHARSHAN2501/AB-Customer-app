@@ -1,4 +1,5 @@
-import { supabase, isSupabaseConfigured, localDB } from './supabase';
+import { supabase, isSupabaseConfigured, localDB, safeStorage } from './supabase';
+import { MENU_CATEGORIES, CATERING_PACKAGES, getItemCategory } from '../constants/categories';
 
 let cachedMenuItems = null;
 let lastMenuFetchTime = 0;
@@ -11,18 +12,16 @@ export const menuService = {
   },
 
   getCategories: async () => {
-    if (cachedMenuItems && cachedMenuItems.length > 0) {
-      const uniqueCats = Array.from(new Set(cachedMenuItems.map(i => i.category_id).filter(Boolean)));
-      if (uniqueCats.length > 0) {
-        return uniqueCats.map((name, idx) => ({ id: name, name: name, display_order: idx }));
+    try {
+      const stored = safeStorage.getItem('smart_rest_categories');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed;
+        }
       }
-    }
-    const items = await menuService.getMenuItems();
-    if (items && items.length > 0) {
-      const uniqueCats = Array.from(new Set(items.map(i => i.category_id).filter(Boolean)));
-      return uniqueCats.map((name, idx) => ({ id: name, name: name, display_order: idx }));
-    }
-    return localDB.getCategories();
+    } catch (e) {}
+    return MENU_CATEGORIES;
   },
 
   getMenuItems: async (forceRefresh = false) => {
@@ -30,20 +29,36 @@ export const menuService = {
       return cachedMenuItems;
     }
 
+    let items = [];
     if (isSupabaseConfigured()) {
       try {
         const { data, error } = await supabase.from('menu_items').select('*').order('name');
         if (!error && data && data.length > 0) {
-          cachedMenuItems = data;
-          lastMenuFetchTime = Date.now();
-          return data;
+          items = data;
         }
       } catch (e) {}
     }
-    const local = localDB.getMenuItems();
-    cachedMenuItems = local;
+
+    if (!items || items.length === 0) {
+      items = localDB.getMenuItems() || [];
+    }
+
+    // Attach classified category to every item
+    const classifiedItems = items.map(item => {
+      const assignedCat = getItemCategory(item);
+      return {
+        ...item,
+        category_name: assignedCat,
+        category_id: assignedCat
+      };
+    });
+
+    // Append catering packages so they are discoverable under Catering Menu
+    const combined = [...classifiedItems, ...CATERING_PACKAGES];
+
+    cachedMenuItems = combined;
     lastMenuFetchTime = Date.now();
-    return local;
+    return combined;
   },
 
   subscribeToMenu: (callback) => {
@@ -60,7 +75,7 @@ export const menuService = {
       } catch (e) {}
     }
 
-    // Cross-tab BroadcastChannel
+    // Cross-tab BroadcastChannel for Menu Items & Categories
     if (typeof BroadcastChannel !== 'undefined') {
       try {
         const bc = new BroadcastChannel('smart_rest_bc_menu_items');
@@ -69,6 +84,12 @@ export const menuService = {
           callback();
         };
         cleanups.push(() => bc.close());
+
+        const bcCat = new BroadcastChannel('smart_rest_bc_categories');
+        bcCat.onmessage = () => {
+          callback();
+        };
+        cleanups.push(() => bcCat.close());
       } catch (e) {}
     }
 
@@ -78,11 +99,15 @@ export const menuService = {
       callback();
     };
     window.addEventListener('smart_rest_event_menu_items', customListener);
-    cleanups.push(() => window.removeEventListener('smart_rest_event_menu_items', customListener));
+    window.addEventListener('smart_rest_event_categories', customListener);
+    cleanups.push(() => {
+      window.removeEventListener('smart_rest_event_menu_items', customListener);
+      window.removeEventListener('smart_rest_event_categories', customListener);
+    });
 
     // Storage Event listener
     const storageListener = (e) => {
-      if (e.key === 'smart_rest_menu_items') {
+      if (e.key === 'smart_rest_menu_items' || e.key === 'smart_rest_categories') {
         menuService.invalidateCache();
         callback();
       }

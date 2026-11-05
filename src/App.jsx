@@ -14,7 +14,8 @@ export function App() {
     document.title = 'Customer Menu - Arunachala Bhavan';
     let link = document.querySelector("link[rel*='icon']");
     if (link) {
-      link.href = '/favicon.svg';
+      link.href = '/favicon.png?v=2';
+      link.type = 'image/png';
     }
   }, []);
 

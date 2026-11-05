@@ -53,8 +53,8 @@ export const Navbar = () => {
           
           {/* Logo & Dynamic Current Page Name */}
           <Link to={menuUrl} className="flex items-center gap-2 sm:gap-3 group text-decoration-none min-w-0 shrink">
-            <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-gradient-to-tr from-slate-900 via-blue-900 to-indigo-700 text-white flex items-center justify-center shadow-md shadow-blue-500/25 group-hover:scale-105 transition-transform duration-300 shrink-0">
-              <Utensils className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+            <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl overflow-hidden shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform duration-300 shrink-0 border border-slate-200">
+              <img src="/customer-app-icon.png" alt="Customer Menu" className="w-full h-full object-cover" />
             </div>
             <div className="min-w-0">
               <span className="font-black text-slate-950 text-lg sm:text-xl tracking-tight leading-none block">
