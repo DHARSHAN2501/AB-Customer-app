@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: #f8fafc;
+    color: #0f172a;
+  }
+}
+
+/* Navy Blue + White Gradient Linear Utilities */
+.gradient-brand {
+  background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #2563eb 100%);
+}
+
+.gradient-brand-subtle {
+  background: linear-gradient(135deg, rgba(30, 58, 138, 0.05) 0%, rgba(37, 99, 235, 0.05) 100%);
+}
+
+.gradient-btn {
+  background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.gradient-btn:hover {
+  background: linear-gradient(135deg, #0f172a 0%, #1d4ed8 100%);
+  box-shadow: 0 8px 20px -4px rgba(37, 99, 235, 0.35);
+  transform: translateY(-1px);
+}
+
+.gradient-btn-emerald {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.gradient-btn-emerald:hover {
+  box-shadow: 0 8px 20px -4px rgba(16, 185, 129, 0.35);
+  transform: translateY(-1px);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.food-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.food-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 30px -10px rgba(30, 58, 138, 0.15);
+}
+
+.pulse-badge {
+  animation: pulse 1.8s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.05); opacity: 0.85; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
